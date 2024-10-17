@@ -26,7 +26,7 @@ public class Order implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId("id")
-    private Integer id;
+    private int id;
 
     /**
      * 快递单号
@@ -50,11 +50,29 @@ public class Order implements Serializable {
      * 订单所属店铺
      */
     @TableField("shopid")
-    private Integer shopid;
+    private int shopid;
+
+    /**
+     * 订单商品
+     */
+    @TableField("productid")
+    private int productid;
+
+    /**
+     * 订单下单商品数量
+     */
+    @TableField("number")
+    private int number;
+
+    /**
+     * 订单状态
+     */
+    @TableField("state")
+    private int state;
 
     /**
      * 下单人id
      */
     @TableField("ownerid")
-    private Integer ownerid;
+    private int ownerid;
 }

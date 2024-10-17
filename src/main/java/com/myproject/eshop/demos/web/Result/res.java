@@ -21,6 +21,10 @@ import lombok.Data;
          return result(4000 ,msg, null);
       }
 
+    public static res fail(){
+        return result(4000 ,"非法操作", null);
+    }
+
       private static res result(int code, String msg, Object data){
           res result = new res();
           result.setCode(code);

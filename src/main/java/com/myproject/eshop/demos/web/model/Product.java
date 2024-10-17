@@ -30,7 +30,7 @@ public class Product implements Serializable {
      * 商品id
      */
     @TableId(value = "productid", type = IdType.AUTO)
-    private Integer productid;
+    private int productid;
 
     /**
      * 商品名
@@ -42,7 +42,7 @@ public class Product implements Serializable {
      * 商品所属店铺
      */
     @TableField("ownershopid")
-    private Integer ownershopid;
+    private int ownershopid;
 
     /**
      * 商品描述
@@ -60,13 +60,13 @@ public class Product implements Serializable {
      * 商品数量
      */
     @TableField("quantity")
-    private Integer quantity;
+    private int quantity;
 
     /**
      * 运费
      */
     @TableField("freight")
-    private Integer freight;
+    private int freight;
 
     /**
      * 商品规格

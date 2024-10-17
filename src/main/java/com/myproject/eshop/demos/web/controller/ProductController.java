@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.myproject.eshop.demos.web.Result.res;
 import com.myproject.eshop.demos.web.model.Product;
 import com.myproject.eshop.demos.web.service.ProductService;
+import com.myproject.eshop.demos.web.utils.BusinessExp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,35 +35,56 @@ public class ProductController {
         return res.success("查询成功",result);
     }
 
-    //根据商品名，最低最高价格，是否免运费，商品类型来进行排序显示
+    //新增商品
+    @PostMapping("/addProduct")
+    public res addProduct(Product product){
+        if(productService.save(product))
+            return res.success("添加成功",product);
+        throw new BusinessExp("添加失败");
+
+    }
+
+    //修改商品
+    @PostMapping("/modProduct")
+    public res modProduct(Product product){
+        if(productService.updateById(product)){
+            return res.success("修改成功",product);
+        }else return res.fail("修改失败");
+
+    }
+
+    //删除商品
+    @PostMapping("/removeProduct")
+    public res removeProduct(int id){
+            if(productService.removeById(id))
+                return res.success("删除成功",null);
+            throw new BusinessExp("删除失败");
+    }
+
+
+    //根据商品名，商品类型，最低最高价格，是否免运费，商品类型来进行排序显示
     @PostMapping("/search")
     public res searchProduct(@RequestParam(required = false) String name, @RequestParam(required = false,defaultValue = "0") int lowPrice,
                              @RequestParam(required = false,defaultValue = "99999999") int highPrice,
                              @RequestParam(required = false,defaultValue = "-1") int freight,
-                             @RequestParam(required = false) String type, @RequestParam(required = false,defaultValue = "asc") String orderByPrice,
-                             int pageNum,int pageSize){
+                             @RequestParam(required = false,defaultValue = "asc") String orderByPrice,
+                             int pageNum,int pageSize,@RequestParam(required = false,defaultValue = "-1")int typeid){
         QueryWrapper<Product> queryWrapper=new QueryWrapper<>();
-        int index = 0;
         if(name!=null){
-            index++;
             queryWrapper.like("name",name);
         }
         if(lowPrice!=0){
-            if(index!=0){
                 queryWrapper.gt("price",lowPrice);
-            }
+        }
+        if(typeid != -1){
+            queryWrapper.eq("typeid",typeid);
         }
         if(highPrice!=0){
-            if(index!=0){
                 queryWrapper.lt("price",highPrice);
-            }
         }
             if(freight==0){
                 queryWrapper.eq("freight",0);
             }
-        if(type!=null){
-            queryWrapper.eq("type",type);
-        }
         if(orderByPrice!=null){
             if(orderByPrice.equals("asc")){
                 queryWrapper.orderByAsc("price");

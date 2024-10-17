@@ -7,7 +7,11 @@ import com.myproject.eshop.demos.web.service.OrderService;
 
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p>
@@ -20,4 +24,18 @@ import org.springframework.stereotype.Service;
 @Service
 public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements OrderService {
 
+    @Autowired
+    private OrderMapper orderMapper;
+
+    @Override
+    public List<Order> getByOwner(int id) {
+        List<Order> orders = orderMapper.UserGetOrder(id);
+        return orders;
+    }
+
+    @Override
+    public List<Order> ShopGetOrder(int shopid) {
+        List<Order> orders = orderMapper.ShopGetOrder(shopid);
+        return orders;
+    }
 }

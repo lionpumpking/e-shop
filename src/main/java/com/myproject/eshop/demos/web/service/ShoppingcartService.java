@@ -4,6 +4,8 @@ import com.myproject.eshop.demos.web.model.Shoppingcart;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -15,4 +17,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ShoppingcartService extends IService<Shoppingcart> {
 
+    List<Shoppingcart> getByShopid(int shopid);
 }

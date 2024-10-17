@@ -29,10 +29,18 @@ public class ProducttypeController {
     @Autowired
     private ProducttypeService productTypeService;
 
+    //删除分类
+    @PostMapping("/delete")
+    public res delete(int id){
+        if(productTypeService.removeById(id))
+            return res.success("删除成功",true);
+        else return res.fail("删除失败");
+    }
 
     //增加分类
     @PostMapping("/addProductType")
     public res addType(String productType) {
+        //controller中不应该直接使用Mapper，但是已经写了，懒得改了
         if(productTypeMapper.getByProducttype(productType)!=null){
             return res.fail("已存在该分类");
         }
@@ -42,7 +50,6 @@ public class ProducttypeController {
         productTypeService.save(result);
         return res.success("添加成功",result);
     }
-
 
     //修改分类名称
     @PostMapping("/updateProductType")

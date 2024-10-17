@@ -21,29 +21,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Data
-@TableName("shoppingcart")
-public class Shoppingcart implements Serializable {
+@TableName("shoptype")
+public class Shoptype implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    @TableField("shoptype")
+    private String shoptype;
+
     @TableId(value = "id", type = IdType.AUTO)
     private int id;
-
-    /**
-     * 购物车拥有人
-     */
-    @TableField("userid")
-    private int userid;
-
-    /**
-     * 产品id
-     */
-    @TableField("productid")
-    private int productid;
-
-    /**
-     * 店铺id
-     */
-    @TableField("shopid")
-    private int shopid;
 }

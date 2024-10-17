@@ -27,7 +27,7 @@ public class Shop implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
+    private int id;
 
     /**
      * 店铺名
@@ -40,6 +40,12 @@ public class Shop implements Serializable {
      */
     @TableField("shoptype")
     private String shoptype;
+
+    /**
+     * 店铺类型id
+     */
+    @TableField("shoptypeid")
+    private String shoptypeid;
 
     /**
      * 拥有者
@@ -63,7 +69,7 @@ public class Shop implements Serializable {
      * 是否审核 0 待审核 1 审核通过 -1 审核不通过
      */
     @TableField("isvalid")
-    private Integer isvalid;
+    private int isvalid;
 
     /**
      * 店铺经度
