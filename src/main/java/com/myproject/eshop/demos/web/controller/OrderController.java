@@ -1,8 +1,10 @@
 package com.myproject.eshop.demos.web.controller;
 
 import com.myproject.eshop.demos.web.Result.res;
+import com.myproject.eshop.demos.web.model.Express;
 import com.myproject.eshop.demos.web.model.Order;
 import com.myproject.eshop.demos.web.model.Product;
+import com.myproject.eshop.demos.web.service.IExpressService;
 import com.myproject.eshop.demos.web.service.OrderService;
 import com.myproject.eshop.demos.web.service.ProductService;
 import com.myproject.eshop.demos.web.utils.BusinessExp;
@@ -32,6 +34,12 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @Autowired
+    private IExpressService expressService;
+
+    @Autowired
+    private expressController expressController;
+
     //下单
     @PostMapping("/GetOrder")
     public res GetOrder(Order order) {
@@ -44,7 +52,11 @@ public class OrderController {
             return res.fail("库存不足");
         }
         price = product.getPrice() * order.getNumber()+product.getFreight();
-        return res.success("下单成功",price);
+        order.setState(5);
+        return res.success("总价",price);
+
+        //推送订单到快递公司，获取快递单号
+
         //判断微信支付是否成功
         //成功
 //        product.setQuantity(product.getQuantity() - order.getNumber());
@@ -55,7 +67,6 @@ public class OrderController {
 //            }
 //        return res.fail("下单失败");
     }
-
 
     //退款
     @PostMapping("/refund")
@@ -73,6 +84,26 @@ public class OrderController {
         if(orderService.updateById(order))
             return res.success("申请退货成功",order);
         throw new BusinessExp("退款申请失败");
+     }
+
+     //商家确认订单
+     @PostMapping("/acceptOrder")
+     public res acceptOrder(int id,String express){
+        Order order = orderService.getById(id);
+        if(order == null){
+            return res.fail("该订单不存在");
+        }
+        //确认成功
+         if(order.getState()== 0){
+             order.setState(4);
+        }
+         //生成快递单号
+         Express newExpress = expressService.getByName(express);
+         order.setPresscompany(express);
+         order.setPressnumber(expressController.expressNumber(newExpress.getAbbreviation()));
+        if(orderService.updateById(order))
+            return res.success("确认成功",order);
+        throw new BusinessExp("确认失败");
      }
 
      //商家处理退款订单

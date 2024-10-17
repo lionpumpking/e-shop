@@ -3,6 +3,7 @@ package com.myproject.eshop.demos.web.mapper;
 import com.myproject.eshop.demos.web.model.Shop;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
@@ -16,6 +17,7 @@ import java.util.List;
  * @author hxt
  * @since 2024-10-17
  */
+@Mapper
 public interface ShopMapper extends BaseMapper<Shop> {
 
     @Select("select * from shop where shoptypeid = #{shoptypeid} ")

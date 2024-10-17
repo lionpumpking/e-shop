@@ -17,4 +17,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShoptypeServiceImpl extends ServiceImpl<ShoptypeMapper, Shoptype> implements ShoptypeService {
 
+    private ShoptypeMapper shoptypeMapper;
+
+    @Override
+    public Shoptype getByShoptype(String shoptype) {
+        return shoptypeMapper.getShoptype(shoptype);
+    }
 }

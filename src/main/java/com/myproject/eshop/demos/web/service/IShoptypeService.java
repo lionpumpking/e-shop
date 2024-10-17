@@ -2,6 +2,7 @@ package com.myproject.eshop.demos.web.service;
 
 import com.myproject.eshop.demos.web.model.Shoptype;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.stereotype.Service;
 
 /**
  * <p>
@@ -11,6 +12,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
  * @author hxt
  * @since 2024-10-17
  */
+@Service
 public interface IShoptypeService extends IService<Shoptype> {
 
 }

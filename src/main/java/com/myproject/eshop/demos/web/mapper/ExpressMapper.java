@@ -1,6 +1,6 @@
 package com.myproject.eshop.demos.web.mapper;
 
-import com.myproject.eshop.demos.web.model.Shoptype;
+import com.myproject.eshop.demos.web.model.Express;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,8 +15,8 @@ import org.apache.ibatis.annotations.Select;
  * @since 2024-10-17
  */
 @Mapper
-public interface ShoptypeMapper extends BaseMapper<Shoptype> {
+public interface ExpressMapper extends BaseMapper<Express> {
 
-    @Select("select * from shoptype where shoptype = #{shoptype}")
-    Shoptype getShoptype(@Param("shoptype") String shoptype);
+    @Select("select * from express where name = #{name}")
+    Express getByName(@Param("name") String name);
 }

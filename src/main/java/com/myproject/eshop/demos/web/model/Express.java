@@ -21,19 +21,23 @@ import lombok.Setter;
 @Getter
 @Setter
 @Data
-@TableName("shoptype")
-public class Shoptype implements Serializable {
+@TableName("express")
+public class Express implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("shoptype")
-    private String shoptype;
-
     @TableId(value = "id", type = IdType.AUTO)
-    private int id;
+    private Integer id;
 
-    public Shoptype(String shoptype) {
-        this.id = id;
-        this.shoptype = shoptype;
-    }
+    /**
+     * 快递公司名称
+     */
+    @TableField("name")
+    private String name;
+
+    /**
+     * 简称
+     */
+    @TableField("abbreviation")
+    private String abbreviation;
 }

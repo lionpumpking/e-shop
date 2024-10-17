@@ -29,6 +29,12 @@ public class ProducttypeController {
     @Autowired
     private ProducttypeService productTypeService;
 
+    //获取所有商品类型
+    @PostMapping("getAllProductTypes")
+    public res GetListProducts() {
+        return res.success("查询成功", productTypeService.list());
+    }
+
     //删除分类
     @PostMapping("/delete")
     public res delete(int id){
