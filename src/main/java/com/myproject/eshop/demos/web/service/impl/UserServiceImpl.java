@@ -1,4 +1,4 @@
-package com.myproject.eshop.demos.web.service.serviceImpl;
+package com.myproject.eshop.demos.web.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myproject.eshop.demos.web.mapper.UserMapper;
