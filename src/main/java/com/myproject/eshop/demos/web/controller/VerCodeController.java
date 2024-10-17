@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.IOException;
 
 /**
-    * Description:
-    * Author:
-    * Data:
-    */
+ * <p>
+ *  前端控制器
+ * </p>
+ *
+ * @author hxt
+ * @since 2024-10-17
+ */
 @RestController
 @RequestMapping("/verCode")
 public class VerCodeController {

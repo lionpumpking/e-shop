@@ -10,10 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**
-    * Description:
-    * Author:
-    * Data:
-    */
+ * <p>
+ *  前端控制器
+ * </p>
+ *
+ * @author hxt
+ * @since 2024-10-17
+ */
 @RestController
 @RequestMapping("/user")
    public class UserController {
