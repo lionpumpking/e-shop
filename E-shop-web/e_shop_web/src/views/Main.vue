@@ -195,13 +195,13 @@ export default {
       })
     }
   },
-  beforeMount () {
-    // console.log('userInfo:'+this.$global.userInfo)
-    this.loadGet()
-    if (this.user9.roleid === 2) {
-      this.dialogVisible3 = true
-    }
-  }
+  // beforeMount () {
+  //   // console.log('userInfo:'+this.$global.userInfo)
+  //   this.loadGet()
+  //   if (this.user9.roleid === 2) {
+  //     this.dialogVisible3 = true
+  //   }
+  // }
 
 }
 

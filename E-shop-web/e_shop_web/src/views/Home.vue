@@ -1,229 +1,421 @@
 
 <script>
-import Main from "@/components/Main.vue";
-import Aside from "@/components/Aside.vue";
-import Hander from "@/components/Hander.vue";
+import Main from "@/views/Main.vue";
+import Aside from "@/views/Aside.vue";
+import Hander from "@/views/Hander.vue";
 
 export default {
   components: {Hander, Aside, Main},
   data() {
     return {
-      user: JSON.parse(localStorage.getItem("curUser")),
-      book: [],
-      dataForm: {
-        username: '',
-        name: '',
-        age: '',
-        sex: ''
-      },
-      dataForm1: {
-        username: '',
-        name: '',
-        age: '',
-        sex: ''
-      },
+      user: JSON.parse(localStorage.getItem("LoginUser")),
       icon: 'el-icon-back',
-      show2:false,
-      show1:true,
+      //右侧卡片显示
+      show2: false,
+      img:'https://5efc9a.oss-cn-hangzhou.aliyuncs.com/eshop-user-img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202024-07-06%20144538.png',
+      show1: false,
+      show3: true,
+      //表格显示数据
+      tableData: [],
+      newUser: '',
+      selectValue:'',
+      modInfo: '修改资料',
+      //修改密码
+      modPassword: '修改密码',
+      passwordMod: {
+        password: '',
+        newPassword: '',
+        confirmPassword: ''
+      },
+      //头部的选项索引
+      activeIndex: '-2',
+      //填写表单规则
+      rules: {
+        username: [
+          {
+            required: true,
+            message: '账号不可为空',
+            trigger: 'blur'
+          }
+        ],
+        name: [
+          {
+            required: true,
+            message: '姓名不可为空',
+            trigger: 'blur'
+          }
+        ],
+        password: [
+          {
+            required: true,
+            message: '原密码不可为空',
+            trigger: 'blur'
+          }
+        ],
+        newPassword: [
+          {
+            required: true,
+            message: '新密码不可为空',
+            trigger: 'blur'
+          }
+        ],
+        confirmPassword: [
+          {
+            required: true,
+            message: '新密码不可为空',
+            trigger: 'blur'
+          }
+        ],
+        phone: [
+          {
+            required: true,
+            message: '电话不可为空',
+            trigger: 'blur'
+          },
+          {
+            min: 7,
+            max: 11,
+            message: '电话号码长度必须在7到11位之间',
+            trigger: 'blur'
+          }
+        ],
+      },
+      uploadData: {
+        directory:"user",
+        name:'',
+      },
     }
   },
-  beforeMount(){
-    this.dataForm.name=this.userInfo.name
-    this.dataForm.username=this.userInfo.username
-    this.dataForm.age=this.userInfo.age
-    this.dataForm.sex=this.userInfo.sex
-    this.dataForm1.name=this.userInfo.name
-    this.dataForm1.username=this.userInfo.username
-    this.dataForm1.age=this.userInfo.age
-    this.dataForm1.sex=this.userInfo.sex
-   // console.log(this.book[0])
-    //console.log(this.dataForm)
-    this.$axios.get(this.$httpurl + '/api/userbook',).then(res=>res.data).then(res=>{
-      //console.log(res)
-      for(var i=0;i<res.length;i++){
-        if(res[i].id == this.user.id){
-          this.book=(res[i].book)
-           console.log(this.book)
-        }
-      }
-    })
-  },
-    created() {
-         this.userInfo=JSON.parse(localStorage.getItem("curUser"));
-    },
 
   methods:{
-      loadInfo(obj){
-        obj.dataForm.name=obj.userInfo.name
-        obj.dataForm.username=obj.userInfo.username
-        obj.dataForm.age=obj.userInfo.age
-        obj.dataForm.sex=obj.userInfo.sex
-        obj.dataForm1.name=obj.userInfo.name
-        obj.dataForm1.username=obj.userInfo.username
-        obj.dataForm1.age=obj.userInfo.age
-        obj.dataForm1.sex=obj.userInfo.sex
-        //console.log(obj.userInfo.age)
-      },
-    valid(){
-        this.show1=!this.show1;
-            this.show2=!this.show2;
+
+    //删除图片
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    //传递图片的地址
+    handlePictureCardPreview(file) {
+      console.log(file)
+      this.dialogImageUrl = file;
+      this.newUser.img=file
+    },
+    //转换页面
+    showModUser (){
+      this.newUser = JSON.parse(localStorage.getItem("LoginUser"))
+      console.log(this.modInfo)
+      if(this.show1 === true) this.show1=false
+      if(this.show3 === true) this.show3=false
+      this.show2=true;
+    },
+    showModPassword(){
+      this.newUser = JSON.parse(localStorage.getItem("LoginUser"))
+      console.log(this.modInfo)
+      if(this.show2 === true) this.show2=false
+      if(this.show3 === true) this.show3=false
+      this.show1=true;
+    },
+    back(){
+      this.show1=false;
+      this.show2=false;
+      this.show3=true;
     },
 
-    suff(obj){
-      obj.$axios.get(obj.$httpurl+'/api/byusername',{
-        params:{username:obj.dataForm1.username}
-      }).then(res=>res.data.data).then(res=>{
-        localStorage.setItem("curUser",JSON.stringify(res[0]))
-        obj.userInfo=JSON.parse(localStorage.getItem("curUser"))
-        obj.$options.methods.loadInfo(obj)
-
-      })
-    },
-
-      mod(){
-            this.$axios.post(this.$httpurl+'/api/mod',{
-                id:this.user.id,
-                username:this.dataForm1.username,
-                name:this.dataForm1.name,
-                sex:this.dataForm1.sex,
-                age:this.dataForm1.age,
-              }).then(res => {
-              this.$options.methods.suff(this)
-              sessionStorage.setItem("CurUser",JSON.stringify(localStorage.getItem("curUser")))
-              this.$message.success("修改成功")
-              this.$options.methods.loadInfo(this)
-
+    //修改基本资料
+    mod(){
+        console.log(this.newUser)
+          let result = new FormData
+          result.append('username', this.newUser.username)
+          result.append('name', this.newUser.name)
+          result.append('id', this.newUser.id)
+          result.append('age', this.newUser.age)
+          result.append('sex', this.newUser.sex)
+          result.append('phone', this.newUser.phone)
+          if(this.newUser.img !== '')
+          result.append('uid', this.newUser.img)
+         if(this.newUser.username=== ""){
+           this.$message.error('账号不可为空')
+           return
+         }
+         if(this.newUser.name=== ""){
+           this.$message.error('姓名不可为空')
+           return
+         }
+        this.$axios.post(this.$httpurl+'/user/modUserInfo',result).then(res=>res.data).then(res => {
+              console.log( res)
+              localStorage.setItem("LoginUser",JSON.stringify(res.data))
+              this.user = res.data
+              this.$message.success('修改成功')
             })
       },
+    //修改密码
+    ModPassword(){
+      console.log(this.passwordMod)
+      if(this.passwordMod.newPassword !== this.passwordMod.confirmPassword){
+        this.$message.error('两次输入的新密码不一致')
+        return
+      }
+      let data = new FormData
+      data.append('password', this.passwordMod.password)
+      data.append('username',this.user.username)
+      data.append("newPassword", this.passwordMod.newPassword)
+      this.$axios.post(this.$httpurl+'/user/modPassword',data).then(res=>res.data).then(res=>{
+        console.log(res)
+        if(res.code === 2000){
+          this.$message.success('修改成功')
+          this.show1=false
+          this.show2=false
+          this.show3=true
+        }else{
+          this.$message.error(res.msg)
+        }
+      })
 
-    returnBook(row){
+    },
+    //用户获取订单
+    getOrder(value){
+      if (value === null) value = -2
+      console.log(value)
+      let data = new FormData
+      data.append('state', value)
+      data.append('id',this.user.id)
+      this.$axios.post(this.$httpurl+'/order/userGetOrder',data).then(res=>res.data).then(res=>{
+        this.tableData = res.data
+        console.log(res)
+    })
+    },
+    //点击表格后的操作按钮
+    operation(){
+      this.$message({
+        message: "Too lazy to do this feature",
+        type: 'error',
+      })
+      //用户操作
+        if(this.user.roleid === 1){
 
-      var formData = new FormData();
-      console.log( this.user.username);
-      formData.append('username', this.user.username);
-      formData.append('bookname', row.book);
-      formData.append('book_author', row.author);
-        this.$axios.post(this.$httpurl+'/api/returnBook',formData).then(res=>{
-          this.$message.success("还书成功")
-          this.$router.go(0)
-        })
+        }
+      //商家操作
+      if(this.user.roleid === 2){
+
+      }
+    },
+    //商家获取订单
+    ShopGetOrder(value){
+      let data = new FormData
+      data.append('state', value)
+      data.append('id',this.user.id)
+      this.$axios.post(this.$httpurl+'/order/shopGetOrder',data).then(res=>res.data).then(res=>{
+        this.tableData = res.data
+        console.log(res)
+      })
+    }
     },
 
-    },
+  mounted(){
+    //根据当前用户身份决定初始化表格的数据
+    this.uploadData.name = this.user.id
+    this.img=this.user.uid
+    if(this.user.roleid===2)
+    this.ShopGetOrder(-2)
+    if(this.user.roleid===1)
+    this.getOrder(-2)
+  }
 }
 </script>
 
 <template>
   <el-container style="height: 100%; border: 1px solid #eee;">
-<!--      <el-header style="text-align: right; font-size: 12px;border-bottom: #bfbbbb 1px solid;">-->
-<!--        <div style="display: flex;line-height: 60px;">-->
-
-<!--          <div >-->
-<!--            <i :class="icon" style="font-size: 20px" @click="back"></i>-->
-<!--          </div>-->
-<!--          <div style="flex: 1; text-align: center;font-size: 24px;">-->
-<!--            <span>欢迎使用</span>-->
-<!--          </div>-->
-<!--          <span style="font-size: 15px;">{{this.user.name}}</span>-->
-
-<!--          <el-dropdown>-->
-<!--            <i class="el-icon-setting" style="margin-left: 8px; font-size: 15px"></i>-->
-<!--            <el-dropdown-menu slot="dropdown">-->
-<!--              <el-dropdown-item @click.native="touser">个人资料</el-dropdown-item>-->
-<!--              <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>-->
-<!--            </el-dropdown-menu>-->
-<!--          </el-dropdown>-->
-
-<!--        </div>-->
-<!--      </el-header>-->
-
+<!--    左侧信息表-->
       <el-main type="height: 100%" style="overflow-y: scroll;" >
         <div>
           <el-row :gutter="20" style="margin-top:10px;">
+<!--            个人信息-->
             <el-col :span="5">
               <div class="grid-content bg-purple">
                 <el-card class="box-card">
                   <div slot="header" class="clearfix">
                     <span>个人中心</span>
                   </div>
+                  <div style="margin-right: 1px">
+<!--                    <img :src="require('../assets/logo.png')" alt="加载中"  style="width:100%;height: 100%">-->
+                    <el-image :src="img"/>
+<!--                  </div>-->
+<!--                  <div class="demo-fit">-->
+<!--                      <el-avatar shape="square" :size="100" fit="contain" :src="require('../assets/logo.png')"> </el-avatar>-->
+<!--                    </div>-->
+                  </div>
+                  <el-divider></el-divider>
                   <div class="register-info">
                     <span class="relation-item">姓名：{{this.user.name}}</span>
                   </div>
                   <div class="register-info" style="margin-top: 10px">
-                    <span class="relation-item" >用户权限：{{this.user.roleid ===  2 ?'超级管理员' :this.user.roleid ===  1 ?'管理员' : '普通用户' }}</span>
-                  </div>
-                  <div class="register-info" style="margin-top: 10px">
-                    <span class="relation-item">账户状态：{{this.user.isValid === 1 ? '审核通过' : '待审核'}}</span>
+                    <span class="relation-item" >用户类型：{{this.user.roleid ===  2 ?'超级管理员' :this.user.roleid ===  1 ?'用户' : '商家' }}</span>
                   </div>
                   <el-divider></el-divider>
                   <div class="personal-relation">
-                    <div class="relation-item">账号:  <div style="float: right; padding-right:20px;">{{this.dataForm.username}}</div></div>
+                    <div class="relation-item">账号:  <div style="float: right; padding-right:20px;">{{this.user.username}}</div></div>
                   </div>
                   <div class="personal-relation">
-                    <div class="relation-item">年龄:  <div style="float: right; padding-right:20px;">{{this.dataForm.age}}</div></div>
+                    <div class="relation-item">年龄:  <div style="float: right; padding-right:20px;">{{this.user.age}}</div></div>
                   </div>
                   <div class="personal-relation">
-                    <div class="relation-item">性别:  <div style="float: right; padding-right:20px;">{{this.dataForm.sex=== 1 ? '男' : '女'}}</div></div>
+                    <div class="relation-item">电话:  <div style="float: right; padding-right:20px;">{{this.user.phone}}</div></div>
                   </div>
+                  <div class="personal-relation">
+                    <div class="relation-item">性别:  <div style="float: right; padding-right:20px;">{{this.user.sex=== 1 ? '男' : (this.user.sex==='0' ? '女' : '保密')}}</div></div>
+                  </div>
+                  <el-button style="margin-left: 5%" @click="showModPassword" size="mini" type="primary">{{ modPassword }}</el-button>
+                  <el-button style="margin-left: 5%" @click="showModUser" size="mini" type="primary">{{ modInfo }}</el-button>
                 </el-card>
               </div>
             </el-col>
             <el-col :span="19">
               <div class="grid-content bg-purple">
-
-                <el-card  v-show="show1" class="box-card">
-                  <div slot="header" class="clearfix">
-                    <span>借阅的书籍</span>
-                  </div>
+<!--原始展示-->
+                <el-card  v-show="show3" class="box-card">
                   <div style="margin-left: 100px">
-                    <el-table
-                        :data="this.book"
-                        empty-text="恭喜您，所有书都已归还"
-                        style="width: 50%">
-                      <el-table-column prop="book" label="书名" width="180">
-<!--                        <template slot-scope="scope">-->
-<!--                          </template>-->
-                      </el-table-column>
-                      <el-table-column prop="author" label="作者">
-                      </el-table-column>
-                      <el-table-column prop="operate" label="操作" >
-                        <template slot-scope="scope">
-                          <!--          <el-button type="success">编辑</el-button>-->
-                          <el-button @click="returnBook(scope.row)" type="danger" >还 书</el-button>
-                        </template>
-                      </el-table-column>
-                    </el-table>
+                  </div>
+                  <div slot="header" class="clearfix">
+                    <span>个人中心</span>
+                  </div>
+                <div>
+                  <div>
+<!--                    用户头部导航菜单-->
+                    <el-menu v-if="this.user.roleid===1"
+                      :default-active="activeIndex"
+                      class="el-menu-demo"
+                      mode="horizontal"
+                      @select="getOrder"
+                      background-color="#545c64"
+                      text-color="#fff"
+                      active-text-color="#ffd04b">
+                      <el-menu-item index="-2">全部订单</el-menu-item>
+                      <el-menu-item index="0">已下单</el-menu-item>
+                      <el-menu-item index="1">已完成</el-menu-item>
+                      <el-menu-item index="-1">退款</el-menu-item>
+                      <el-menu-item index="2">退款申请中</el-menu-item>
+                      <el-menu-item index="3">退款驳回</el-menu-item>
+                      <el-menu-item index="5">待支付</el-menu-item>
+                      <el-menu-item index="4">待商家确认</el-menu-item>
+                    </el-menu>
 
-                    <el-button style="margin-left: 75%" @click="valid" size="mini" type="primary">修改资料</el-button>
+<!--                    商家头部导航-->
+                    <el-menu v-if="this.user.roleid===0"
+                             :default-active="activeIndex"
+                             class="el-menu-demo"
+                             mode="horizontal"
+                             @select="ShopGetOrder"
+                             background-color="#545c64"
+                             text-color="#fff"
+                             active-text-color="#ffd04b">
+                      <el-menu-item index="-2">全部订单</el-menu-item>
+                      <el-menu-item index="2">退款申请</el-menu-item>
+                      <el-menu-item index="1">已完成</el-menu-item>
+                      <el-menu-item index="-1">退款</el-menu-item>
+                      <el-menu-item index="3">退款驳回</el-menu-item>
+                      <el-menu-item index="5">待支付</el-menu-item>
+                    </el-menu>
+<!--                    订单表-->
+                  </div>
+                  <el-table
+                    :data="tableData"
+                    stripe
+                    style="width: 100%">
+                    <el-table-column
+                      prop="pressnumber"
+                      label="快递单号"
+                      width="180">
+                    </el-table-column>
+                    <el-table-column
+                      prop="destination"
+                      label="收货地址"
+                      width="180">
+                    </el-table-column>
+                    <el-table-column
+                      prop="productid"
+                      label="商品名称">
+                    </el-table-column>
+                    <el-table-column
+                      prop="number"
+                      label="商品数量">
+                    </el-table-column>
+                    <el-table-column label="操作">
+                      <el-button @click="operation">操作</el-button>
+                    </el-table-column>
+                  </el-table>
+                </div>
+                </el-card>
+<!--修改密码-->
+                <el-card  v-show="show1" class="box-card">
+                  <div style="margin-left: 100px">
+                  </div>
+                  <div slot="header" class="clearfix">
+                    <span>修改密码</span>
+                  </div>
+                  <div>
+                    <el-form label-width="80px" :model="passwordMod" ref="ruleForm" size="small" :rules="rules" label-position="right">
+                      <el-form-item label="原密码" prop="password" >
+                        <el-input  v-model="passwordMod.password" placeholder="原密码不可为空"></el-input>
+                      </el-form-item>
+                      <el-form-item label="新密码" prop="newPassword">
+                        <el-input   v-model="passwordMod.newPassword" placeholder="新密码不可为空"></el-input>
+                      </el-form-item>
+                      <el-form-item label="新密码" prop="confirmPassword">
+                        <el-input   maxlength="18" placeholder="请再次输入新密码" v-model="passwordMod.confirmPassword"></el-input>
+                      </el-form-item>
+                    </el-form>
+                    <div slot="footer" class="dialog-footer">
+                      <el-button style="margin-left: 80%" @click="back" size="mini" type="primary">返 回</el-button>
+                      <el-button style="margin-left: 5%" @click="ModPassword" size="mini" type="primary">修 改</el-button>
+                      <!--                      <el-button @click="back" size="mini" type="warning" >关 闭</el-button>-->
+                    </div>
                   </div>
                 </el-card>
 
-
+<!--修改资料-->
                 <el-card v-show="show2" class="box-card">
                   <div slot="header" class="clearfix">
                     <span>修改基本资料</span>
                   </div>
                   <div>
-                    <el-form label-width="80px" v-model="dataForm1" size="small" label-position="right">
-                      <el-form-item label="*姓名" prop="nickName">
-                        <el-input   auto-complete="off" v-model="dataForm1.name"></el-input>
+                    <el-form label-width="80px" :model="newUser" size="small" :rules="rules" label-position="right">
+                      <el-form-item label="姓名" prop="name">
+                        <el-upload
+                          action="http://172.20.36.194:8082/file/upload"
+                          :data="uploadData"
+                          list-type="picture-card"
+                          :on-success="handlePictureCardPreview"
+                          :on-remove="handleRemove">
+                          <i class="el-icon-plus"></i>
+                        </el-upload>
+                        <!--          <el-image v-else  :src="dialogImageUrl" style="width:300px"/>-->
+                        <el-dialog :visible.sync="dialogVisible">
+                          <img width="100%" :src="dialogImageUrl" alt="">
+                        </el-dialog>
+                        <span>原头像见左侧，上传多张仅最后一张有效</span>
                       </el-form-item>
-                      <el-form-item label="*账号" prop="phone">
-                        <el-input  auto-complete="off" v-model="dataForm1.username"></el-input>
+                      <el-form-item label="姓名" prop="name">
+                        <el-input  v-model="newUser.name" placeholder="姓名不可为空"></el-input>
                       </el-form-item>
-                      <el-form-item label="年龄" prop="homeUrl">
-                        <el-input   maxlength="18" v-model="dataForm1.age"></el-input>
+                      <el-form-item label="账号" prop="username">
+                        <el-input   v-model="newUser.username" placeholder="账号不可为空"></el-input>
                       </el-form-item>
-                      <el-form-item label="性别" prop="homeUrl">
-                        <el-radio-group v-model="dataForm1.sex">
+                      <el-form-item label="电话" prop="phone">
+                        <el-input   v-model="newUser.phone" placeholder="电话不可为空"></el-input>
+                      </el-form-item>
+                      <el-form-item label="年龄" >
+                        <el-input   maxlength="18" v-model="newUser.age"></el-input>
+                      </el-form-item>
+                      <el-form-item label="性别">
+                        <el-radio-group v-model="newUser.sex">
                           <el-radio-button label="1">男</el-radio-button>
                           <el-radio-button label="0">女</el-radio-button>
+                          <el-radio-button label="2">保密</el-radio-button>
                         </el-radio-group>
                       </el-form-item>
                     </el-form>
                     <div style="margin-top: -10px">  <span style="font-size: 10px;margin-left: 3%;">提示：带*号的为必填项</span></div>
                     <div slot="footer" class="dialog-footer">
-                      <el-button style="margin-left: 80%" @click="valid" size="mini" type="primary">返 回</el-button>
+                      <el-button style="margin-left: 80%" @click="back" size="mini" type="primary">返 回</el-button>
                       <el-button style="margin-left: 5%" @click="mod" size="mini" type="primary">修 改</el-button>
                       <!--                      <el-button @click="back" size="mini" type="warning" >关 闭</el-button>-->
                     </div>
@@ -242,6 +434,7 @@ export default {
 
 <style lang="scss" scoped>
 //卡片样式
+
 .text {
   font-size: 14px;
 }
@@ -277,7 +470,7 @@ export default {
 }
 .personal-relation {
   font-size: 16px;
-  padding: 0 5px 15px;
+  padding: 0 0px 0px;
   margin-right: 1px;
   width: 100%
 }
@@ -300,6 +493,7 @@ export default {
 .el-col {
   border-radius: 4px;
 }
+
 .bg-purple-dark {
   background: #99a9bf;
 }
