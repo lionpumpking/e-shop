@@ -36,7 +36,7 @@ export default {
   },
 
   Create () {
-    const userInfo = JSON.parse(localStorage.getItem('curUser'))
+    const userInfo = JSON.parse(localStorage.getItem('LoginUser'))
   }
 }
 

@@ -10,7 +10,7 @@ export default {
     icon: String
   },
   created () {
-    this.$router.push('user')
+    this.$router.push('userInfo')
   },
 
   methods: {

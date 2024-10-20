@@ -4,6 +4,7 @@ export default {
   data () {
     return {
       // isCollapse:false
+      userInfo : ''
     }
   },
   computed: {
@@ -13,14 +14,28 @@ export default {
       }
     }
   },
-  beforeMount () {
+  created () {
+    this.userInfo = JSON.parse(localStorage.getItem('LoginUser')) || {}  // 获取本地存储的用户信息
+    this.getMenu()
     this.load()
   },
   methods: {
+    getMenu () {
+      this.$axios.get(this.$httpurl +'/menu/list',{
+        params: {
+          roleid:this.userInfo.roleid
+        }
+      }).then(res=>res.data).then(res=>{
+        this.$store.commit("setMenu", res.data)
+        localStorage.setItem("currMenu", JSON.stringify(res.data))
+      })
+    },
+
     load () {
-      this.$store.commit('setMenu', JSON.parse(localStorage.getItem('curMenu')))
+      this.$store.commit('setMenu', JSON.parse(localStorage.getItem('currMenu')))
     }
   },
+
   props: {
     isCollapse: Boolean
   }
@@ -34,16 +49,16 @@ export default {
       active-text-color="#ffd04b"
       style="height: 100vh;
       position: fixed;"
-      default-active="/user"
+      default-active="/userInfo"
       :collapse="isCollapse"
       :collapse-transition="false"
       router>
-    <el-menu-item index="/user" style="width:200px;height:0px">
-      <span slot="title">首页</span>
+    <el-menu-item index="/userInfo" style="width:200px;height:0px">
+      <span slot="title">个人信息</span>
     </el-menu-item>
-      <el-menu-item index="/user">
+      <el-menu-item index="/userInfo">
         <i class="el-icon-s-home"></i>
-        <span slot="title">首页</span>
+        <span slot="title">个人信息</span>
       </el-menu-item>
 
     <el-menu-item :index="'/'+item.menuclick" v-for="(item,i) in menu" :key="i">

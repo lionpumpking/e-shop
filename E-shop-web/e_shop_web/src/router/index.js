@@ -12,45 +12,55 @@ const routes = [
   },
   {
     path: '/index',
-    name: 'Index-web',
+    name: 'index',
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "about" */ '../views/Index-web.vue'),
-    // children: [{
-    //   path: '/book',
-    //   name: 'book',
-    //   meta: {
-    //     title: '图书管理'
-    //   },
-    //   component: () => import('../components/todex/bookManger.vue')
-    // },
-    // {
-    //   path: '/userMange',
-    //   name: 'userMange',
-    //   meta: {
-    //     title: '用户管理'
-    //   },
-    //   component: () => import('../components/Main.vue')
-    // },
-    // {
-    //   path: '/user',
-    //   name: 'user',
-    //   meta: {
-    //     title: '个人管理'
-    //   },
-    //   component: () => import('../components/Home.vue')
-    // },
-    //
-    // {
-    //   path: '/err',
-    //   name: 'error',
-    //   meta: {
-    //     title: '错误'
-    //   },
-    //   component: () => import('../components/error.vue')
-    // }
-    // ]
+    children: [
+      {
+      path: '/homepage',
+      name: 'homepage',
+      meta: {
+        title: '首页'
+      },
+      component: () => import('../views/homepage.vue')
+    },
+    {
+      path: '/user',
+      name: 'user',
+      meta: {
+        title: '用户管理'
+      },
+      component: () => import('../views/Main.vue')
+    },
+    {
+      path: '/userInfo',
+      name: 'userInfo',
+      meta: {
+        title: '个人管理'
+      },
+      component: () => import('../views/Home.vue')
+    },
+
+      {
+        path: '/productManage',
+        name: 'productManage',
+        meta: {
+          title: '错误'
+        },
+        component: () => import('../views/productManageByShop.vue')
+      },
+
+    {
+      path: '/err',
+      name: 'error',
+      meta: {
+        title: '错误'
+      },
+      component: () => import('../views/error.vue')
+    }
+    ]
   },
 
   // {
@@ -68,7 +78,7 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  // mode: 'history',
+  mode: 'history',
   routes
 })
 
@@ -83,11 +93,6 @@ router.beforeEach(async (to, from, next) => {
     next()
   } else {
     const admin = JSON.parse(localStorage.getItem('LoginUser'))
-    // if(admin==null){
-    //   next('/err')
-    // }else{
-    // 172.20.36.194:8087
-    // 60.204.200.197:8083
     axios.get('http://172.20.36.194:8082/user/checkLogin', {
       headers: {
         token: admin.token
