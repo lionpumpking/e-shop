@@ -89,7 +89,7 @@ export default {
         }
       }).then(res => res.data).then(res => {
         // console.log(res)
-        if (res.data.length > 0) {
+        if (res.data!==null||res.data.length >= 0) {
           this.tableData = res.data
           this.$message({
             type: 'success',

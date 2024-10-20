@@ -47,7 +47,7 @@ const routes = [
         path: '/productManage',
         name: 'productManage',
         meta: {
-          title: '错误'
+          title: '产品管理'
         },
         component: () => import('../views/productManageByShop.vue')
       },
@@ -59,7 +59,16 @@ const routes = [
         title: '错误'
       },
       component: () => import('../views/error.vue')
-    }
+    },
+      {
+        path: '/productType',
+        name: 'productType',
+        meta: {
+          title: '错误'
+        },
+        component: () => import('../views/productTypeManger.vue')
+      }
+
     ]
   },
 
