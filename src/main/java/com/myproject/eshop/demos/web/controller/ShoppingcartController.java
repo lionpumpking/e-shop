@@ -4,6 +4,7 @@ import com.myproject.eshop.demos.web.Result.res;
 import com.myproject.eshop.demos.web.model.Shoppingcart;
 import com.myproject.eshop.demos.web.service.ShoppingcartService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import java.util.List;
  * @author hxt
  * @since 2024-10-17
  */
+@CrossOrigin(origins =  "${my.cross.url}",allowCredentials = "true")
 @RestController
 @RequestMapping("/shoppingcart")
 public class ShoppingcartController {

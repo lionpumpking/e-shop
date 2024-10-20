@@ -25,4 +25,7 @@ public interface ShopMapper extends BaseMapper<Shop> {
 
     @Delete("delete shop from shop where id = #{id}")
     boolean removeById(Integer id);
+
+    @Select("select * from shop where ownerusername = #{ownerusername} ")
+    Shop getByUsername(@Param("ownerusername") String ownerusername);
 }

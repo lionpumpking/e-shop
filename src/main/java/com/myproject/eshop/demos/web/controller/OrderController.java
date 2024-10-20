@@ -1,19 +1,17 @@
 package com.myproject.eshop.demos.web.controller;
 
 import com.myproject.eshop.demos.web.Result.res;
-import com.myproject.eshop.demos.web.model.Express;
-import com.myproject.eshop.demos.web.model.Order;
-import com.myproject.eshop.demos.web.model.Product;
-import com.myproject.eshop.demos.web.service.IExpressService;
-import com.myproject.eshop.demos.web.service.OrderService;
-import com.myproject.eshop.demos.web.service.ProductService;
+import com.myproject.eshop.demos.web.model.*;
+import com.myproject.eshop.demos.web.service.*;
 import com.myproject.eshop.demos.web.utils.BusinessExp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +22,7 @@ import java.util.List;
  * @author hxt
  * @since 2024-10-17
  */
+@CrossOrigin(origins =  "${my.cross.url}",allowCredentials = "true")
 @RestController
 @RequestMapping("/order")
 public class OrderController {
@@ -39,6 +38,12 @@ public class OrderController {
 
     @Autowired
     private expressController expressController;
+
+    @Autowired
+    private ShopService shopService;
+
+    @Autowired
+    private UserService userService;
 
     //下单
     @PostMapping("/GetOrder")
@@ -121,21 +126,39 @@ public class OrderController {
 
      //用户获取自己的订单
      @PostMapping("/userGetOrder")
-     public res userGetOrder(int id){
+     public res userGetOrder(int id,int state){
         List<Order> orders = orderService.getByOwner(id);
         if(orders.isEmpty()){
             return res.fail("该用户没有订单");
         }
-        return res.success("查询成功",orders);
+        if(state == -2){
+            return res.success("查询成功",orders);
+        }
+        List<Order> result = new ArrayList<>();
+        for(Order order:orders){
+            if(order.getState() == state){
+                result.add(order);
+            }
+        }
+        return res.success("查询成功",result);
      }
 
      //商家获取店铺订单
      @PostMapping("/shopGetOrder")
-     public res shopGetOrder(int shopid){
-        List<Order> orders = orderService.ShopGetOrder(shopid);
+     public res shopGetOrder(int id,int state){
+         Shop shop = shopService.getByOwnerUsername(userService.getById(id).getUsername());
+        List<Order> orders = orderService.ShopGetOrder(shop.getId());
         if(orders.isEmpty()){
             return res.fail("该商家没有订单");
         }
-        return res.success("查询成功",orders);
+        if(state == -2)
+            return res.success("查询成功",orders);
+         List<Order> result = new ArrayList<>();
+         for(Order order:orders){
+             if(order.getState() == state){
+                 result.add(order);
+             }
+         }
+         return res.success("查询成功",result);
      }
 }

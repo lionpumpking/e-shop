@@ -1,8 +1,10 @@
 package com.myproject.eshop.demos.web.service;
 
-import com.myproject.eshop.demos.web.model.Shop;
+import com.myproject.eshop.demos.web.model.Menu;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -10,11 +12,10 @@ import org.springframework.stereotype.Service;
  * </p>
  *
  * @author hxt
- * @since 2024-10-17
+ * @since 2024-10-18
  */
-@Service
-public interface ShopService extends IService<Shop> {
 
-    Shop getByOwnerUsername(String username);
+public interface IMenuService extends IService<Menu> {
 
+    List<Menu> getMenuByRoleid(String roleid);
 }

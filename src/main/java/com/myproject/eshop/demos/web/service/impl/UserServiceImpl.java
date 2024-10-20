@@ -20,7 +20,8 @@ import org.springframework.stereotype.Service;
 
    @Override
    public User LoginCheck(String username, String password) {
-      User user = userMapper.getByUsername(username);
+      User user = userMapper.LoginCheck(username,password);
+      System.out.println(user);
       if(user!= null) {
          return user;
       }

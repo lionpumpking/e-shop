@@ -51,6 +51,12 @@ public class Product implements Serializable {
     private String description;
 
     /**
+     * 商品图片
+     */
+    @TableField("img")
+    private String img;
+
+    /**
      * 商品价格
      */
     @TableField("price")
@@ -61,6 +67,12 @@ public class Product implements Serializable {
      */
     @TableField("quantity")
     private int quantity;
+
+    /**
+     * 商品类型
+     */
+    @TableField("producttype")
+    private String producttype;
 
     /**
      * 运费
@@ -75,8 +87,8 @@ public class Product implements Serializable {
     private String specification;
 
     /**
-     * 商品类型
+     * 商品类型id
      */
     @TableField("typeid")
-    private String typeid;
+    private int typeid;
 }

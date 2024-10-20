@@ -5,10 +5,18 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.myproject.eshop.demos.web.Result.res;
 import com.myproject.eshop.demos.web.model.Product;
+import com.myproject.eshop.demos.web.model.Producttype;
+import com.myproject.eshop.demos.web.model.Shop;
+import com.myproject.eshop.demos.web.model.User;
 import com.myproject.eshop.demos.web.service.ProductService;
+import com.myproject.eshop.demos.web.service.ProducttypeService;
+import com.myproject.eshop.demos.web.service.ShopService;
+import com.myproject.eshop.demos.web.service.UserService;
 import com.myproject.eshop.demos.web.utils.BusinessExp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 /**
@@ -19,6 +27,7 @@ import org.springframework.web.bind.annotation.*;
  * @author hxt
  * @since 2024-10-17
  */
+@CrossOrigin(origins =  "${my.cross.url}",allowCredentials = "true")
 @RestController
 @RequestMapping("/product")
 public class ProductController {
@@ -26,6 +35,31 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ShopService shopService;
+
+    @Autowired
+    private ProducttypeService producttypeService;
+
+    //商家查询自己店铺的商品
+    @GetMapping("/getPageShop")
+    public res getPageShop(String id) {
+        Shop shop = shopService.getByOwnerUsername(id);
+        List<Product> products = productService.getByOwnshopid(shop.getId());
+//        IPage result=productService.page(page);
+        return res.success("查询成功",products);
+    }
+
+    //商家查询需要补货的商品，即商品库存小于10
+    @GetMapping("/getProductLess")
+    public res getProductLess(int id){
+        Shop shop = shopService.getByOwnerUsername(String.valueOf(id));
+        List<Product> products = productService.getLessThan(shop.getId());
+        if(products.size() == 0){
+            return res.fail("暂无商品");
+        }
+        else return res.success("查询成功",products);
+    }
 
     //显示所有商品
     @GetMapping("/getPage")
@@ -37,7 +71,21 @@ public class ProductController {
 
     //新增商品
     @PostMapping("/addProduct")
-    public res addProduct(Product product){
+    public res addProduct(int id,String name,String description,double price,int quantity,
+                          int freight,String specification,int typeid,String img){
+        Shop shop = shopService.getByOwnerUsername(String.valueOf(id));
+        Producttype type = producttypeService.getById(typeid);
+        Product product = new Product();
+        product.setName(name);
+        product.setDescription(description);
+        product.setPrice(price);
+        product.setQuantity(quantity);
+        product.setFreight(freight);
+        product.setSpecification(specification);
+        product.setTypeid(typeid);
+        product.setImg(img);
+        product.setProducttype(type.getProductType());
+        product.setOwnershopid(shop.getId());
         if(productService.save(product))
             return res.success("添加成功",product);
         throw new BusinessExp("添加失败");
@@ -46,7 +94,20 @@ public class ProductController {
 
     //修改商品
     @PostMapping("/modProduct")
-    public res modProduct(Product product){
+    public res modProduct(int productid,String name,String description,double price,int quantity,
+                          int freight,String specification,int typeid,String img){
+        Producttype type = producttypeService.getById(typeid);
+        Product product=productService.getById(productid);
+        System.out.println(product);
+        product.setName(name);
+        product.setDescription(description);
+        product.setPrice(price);
+        product.setQuantity(quantity);
+        product.setFreight(freight);
+        product.setSpecification(specification);
+        product.setTypeid(typeid);
+        product.setImg(img);
+        product.setProducttype(type.getProductType());
         if(productService.updateById(product)){
             return res.success("修改成功",product);
         }else return res.fail("修改失败");

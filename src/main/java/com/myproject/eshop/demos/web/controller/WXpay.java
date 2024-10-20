@@ -4,6 +4,7 @@ import com.myproject.eshop.demos.web.Result.res;
 import com.myproject.eshop.demos.web.model.Order;
 import com.myproject.eshop.demos.web.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
     * Author:
     * Data:
     */
+@CrossOrigin(origins =  "${my.cross.url}",allowCredentials = "true")
 @RestController
 @RequestMapping("WXpay")
    public class WXpay {

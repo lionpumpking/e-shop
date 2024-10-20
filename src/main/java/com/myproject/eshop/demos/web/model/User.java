@@ -12,11 +12,13 @@ import lombok.Data;
 @TableName("user")
    public class User {
       private int id;
-      private int uid;
+      private String uid;
       private String username;
       private String name;
       private String password;
       private int sex;
       private int age;
       private int roleid;
+      private String Token;
+      private String phone;
    }

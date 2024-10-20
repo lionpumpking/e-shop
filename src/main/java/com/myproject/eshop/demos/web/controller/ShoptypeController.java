@@ -5,6 +5,7 @@ import com.myproject.eshop.demos.web.mapper.ShoptypeMapper;
 import com.myproject.eshop.demos.web.model.Shoptype;
 import com.myproject.eshop.demos.web.service.ShoptypeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author hxt
  * @since 2024-10-17
  */
+@CrossOrigin(origins =  "${my.cross.url}",allowCredentials = "true")
 @RestController
 @RequestMapping("/shoptype")
 public class ShoptypeController {

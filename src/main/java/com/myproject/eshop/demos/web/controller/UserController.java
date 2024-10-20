@@ -1,14 +1,22 @@
 package com.myproject.eshop.demos.web.controller;
 
+import com.myproject.eshop.demos.web.Auth.JWT;
 import com.myproject.eshop.demos.web.Result.UserVo;
 import com.myproject.eshop.demos.web.Result.res;
 import com.myproject.eshop.demos.web.mapper.UserMapper;
 import com.myproject.eshop.demos.web.model.User;
 import com.myproject.eshop.demos.web.service.UserService;
 import com.myproject.eshop.demos.web.utils.BusinessExp;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.swagger.v3.oas.models.security.SecurityScheme;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 /**
  * <p>
@@ -18,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
  * @author hxt
  * @since 2024-10-17
  */
+@CrossOrigin(origins =  "${my.cross.url}",allowCredentials = "true")
 @RestController
 @RequestMapping("/user")
    public class UserController {
@@ -30,6 +39,8 @@ import org.springframework.web.bind.annotation.*;
 
    @Autowired
    private VerCodeController verCodeController;
+   @Autowired
+   private OrderController orderController;
 
 //   test
 //   @GetMapping("/get")
@@ -43,15 +54,18 @@ import org.springframework.web.bind.annotation.*;
       if(!verCodeController.loginVerCode(session,verCode))
          return res.fail("验证码错误");
       User user =userService.LoginCheck(username, password);
-      if(user == null) return res.fail("账号或密码错误");
+      user.setToken(JWT.createToken(user.getUsername(), user.getRoleid()));
+      System.out.println("User"+user);
+      if(user.getPassword() == null) return res.fail("账号或密码错误");
+      userService.updateById(user);
       return res.success("登录成功",new UserVo(user));
    }
 
    //注册用户
    @PostMapping("/signin")
-   public res SignIN(@RequestBody User user){
+   public res SignIN( User user){
       if(userMapper.getByUsername(user.getUsername()) != null){
-         return res.fail("该用户名已存在");
+         return res.fail("该账号已存在");
       }
       userService.save(user);
       return res.success("注册成功", new UserVo(user));
@@ -59,10 +73,18 @@ import org.springframework.web.bind.annotation.*;
 
    //修改除密码外的信息
    @PostMapping("/modUserInfo")
-   public res modUserInfo(@RequestBody User user){
-      User newUser = userService.getById(user.getId());
-      user.setPassword(newUser.getPassword());
-      if(userService.save(user))
+   public res modUserInfo(int id, String username, int age, int sex, String name,String phone,String uid){
+      User user = userService.getById(id);
+      if(!Objects.equals(uid, "undefined")){
+         user.setUid(uid);
+      }
+      user.setUsername(username);
+      user.setAge(age);
+      user.setSex(sex);
+      user.setName(name);
+      user.setPhone(phone);
+      System.out.println(user);
+      if(userService.updateById(user))
          return res.success("修改成功", new UserVo(user));
       throw new BusinessExp("修改失败");
    }
@@ -71,7 +93,8 @@ import org.springframework.web.bind.annotation.*;
    @PostMapping("/modPassword")
    public res modPassword(String username, String password,String newPassword){
       User user= userService.LoginCheck(username, password);
-      if(user == null) return res.fail("原密码错误！");
+      System.out.println(user);
+      if(user.getUsername() == null) return res.fail("原密码错误！");
       user.setPassword(newPassword);
       try {
          userService.updateById(user);
@@ -79,5 +102,19 @@ import org.springframework.web.bind.annotation.*;
       } catch (Exception e) {
          throw new BusinessExp("修改失败");
       }
+   }
+
+   @GetMapping("/checkLogin")
+   public Boolean checkLogin(HttpServletRequest request){
+
+      String token = request.getHeader("token");
+      Jws<Claims> claimsJws = Jwts.parser().setSigningKey("5efc9a").parseClaimsJws(token);
+//        System.out.println(claimsJws);
+      String username=claimsJws.getBody().get("username").toString();;
+//        System.out.println(username);
+//        System.out.println(userService.getByUsername(username).getToken());
+      if (JWT.checkToken(token)&& Objects.equals(userMapper.getByUsername(username).getToken(), token))
+         return true;
+      else return JWT.checkToken(token) && Objects.equals(userMapper.getByUsername(username).getToken(), null);
    }
 }
