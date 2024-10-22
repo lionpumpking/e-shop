@@ -21,4 +21,8 @@ public interface ShoppingcartMapper extends BaseMapper<Shoppingcart> {
 
     @Select("select * from shoppingcart where shopid = #{shopid}")
     List<Shoppingcart> getByShopid(@Param("shopid")int shopid);
+
+
+    @Select("SELECT * FROM shoppingcart WHERE userid = #{userid}")
+    List<Shoppingcart> getByUserId(@Param("userid") int userid);
 }

@@ -29,12 +29,14 @@ public class ShoptypeController {
     //新增店铺类型
     @PostMapping("/addShoptype")
     public res addShoptype(String shoptype){
-        Shoptype shop = shoptypeService.getByShoptype(shoptype);
-        if(shop!=null) return res.fail("该分类已存在");
-        else shop.setShoptype(shoptype);
+        Shoptype type = shoptypeService.getByShoptype(shoptype);
+        if(type!=null) return res.fail("该分类已存在");
+        else {Shoptype shop = new Shoptype();
+            shop.setShoptype(shoptype);
         if(shoptypeService.save(shop))
             return res.success("添加成功",shoptype);
         else return res.fail("添加失败");
+        }
     }
 
     //查询所有店铺类型
@@ -54,8 +56,9 @@ public class ShoptypeController {
     }
 
     //修改店铺类型
-    public res modShopType(String shoptype){
-        Shoptype shop = shoptypeService.getByShoptype(shoptype);
+    @PostMapping("/modShopType")
+    public res modShopType(int id,String shoptype){
+        Shoptype shop = shoptypeService.getById(id);
         if(shop==null) return res.fail("该分类不存在");
         shop.setShoptype(shoptype);
         if(shoptypeService.updateById(shop))

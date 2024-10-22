@@ -18,4 +18,6 @@ import java.util.List;
 public interface ShoppingcartService extends IService<Shoppingcart> {
 
     List<Shoppingcart> getByShopid(int shopid);
+
+    List<Shoppingcart> getByUserId(int userid);
 }

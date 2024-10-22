@@ -74,6 +74,18 @@ public class ShopController {
         }
     }
 
+    //审核店铺
+    @PostMapping("/auditShop")
+    public res auditShop(int shopid, int isvalid){
+        Shop shop = shopService.getById(shopid);
+        if(shop==null) return res.fail("该店铺不存在");
+        shop.setIsvalid(isvalid);
+        if(shopService.updateById(shop)){
+            return res.success("修改成功",shop);
+        }
+        return res.fail("修改失败");
+    }
+
     //修改店铺信息
     @PostMapping("/updateShop")
     public res updateShop(Shop shop){

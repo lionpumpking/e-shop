@@ -4,6 +4,7 @@ import com.myproject.eshop.demos.web.model.Shoptype;
 import com.myproject.eshop.demos.web.mapper.ShoptypeMapper;
 import com.myproject.eshop.demos.web.service.ShoptypeService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ShoptypeServiceImpl extends ServiceImpl<ShoptypeMapper, Shoptype> implements ShoptypeService {
 
+    @Autowired
     private ShoptypeMapper shoptypeMapper;
 
     @Override

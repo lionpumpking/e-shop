@@ -108,9 +108,10 @@ import java.util.Objects;
    public Boolean checkLogin(HttpServletRequest request){
 
       String token = request.getHeader("token");
+//      System.out.println(token);
       Jws<Claims> claimsJws = Jwts.parser().setSigningKey("5efc9a").parseClaimsJws(token);
-//        System.out.println(claimsJws);
-      String username=claimsJws.getBody().get("username").toString();;
+//        System.out.println(claimsJws.getBody());
+      String username=claimsJws.getBody().get("username").toString();
 //        System.out.println(username);
 //        System.out.println(userService.getByUsername(username).getToken());
       if (JWT.checkToken(token)&& Objects.equals(userMapper.getByUsername(username).getToken(), token))

@@ -29,4 +29,9 @@ public class ShoppingcartServiceImpl extends ServiceImpl<ShoppingcartMapper, Sho
         List<Shoppingcart> shoppings = shoppingcartMapper.getByShopid(shopid);
         return shoppings;
     }
+
+    @Override
+    public List<Shoppingcart> getByUserId(int userid) {
+        return shoppingcartMapper.getByUserId(userid);
+    }
 }

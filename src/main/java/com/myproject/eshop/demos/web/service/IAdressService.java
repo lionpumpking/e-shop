@@ -1,6 +1,6 @@
 package com.myproject.eshop.demos.web.service;
 
-import com.myproject.eshop.demos.web.model.Product;
+import com.myproject.eshop.demos.web.model.Adress;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.springframework.stereotype.Service;
 
@@ -12,14 +12,10 @@ import java.util.List;
  * </p>
  *
  * @author hxt
- * @since 2024-10-17
+ * @since 2024-10-22
  */
 
-public interface ProductService extends IService<Product> {
+public interface IAdressService extends IService<Adress> {
 
-    List<Product> getByOwnshopid(int id);
-
-    List<Product> getLessThan(int id);
+    List<Adress> getByUserId(int userid);
 }
-
-

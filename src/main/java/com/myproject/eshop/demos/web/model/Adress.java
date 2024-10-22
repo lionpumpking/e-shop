@@ -16,24 +16,22 @@ import lombok.Setter;
  * </p>
  *
  * @author hxt
- * @since 2024-10-17
+ * @since 2024-10-22
  */
 @Getter
 @Setter
 @Data
-@TableName("shoptype")
-public class Shoptype implements Serializable {
+@TableName("adress")
+public class Adress implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableField("shoptype")
-    private String shoptype;
-
     @TableId(value = "id", type = IdType.AUTO)
-    private int id;
+    private Integer id;
 
-    public Shoptype() {
-        this.id = id;
-        this.shoptype = shoptype;
-    }
+    @TableField("userid")
+    private Integer userid;
+
+    @TableField("adress")
+    private String adress;
 }
