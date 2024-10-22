@@ -106,7 +106,7 @@ export default {
           pagesize: this.pageSize
         }
       }).then(res => res.data.data).then(res => {
-        console.log(res)
+        //console.log(res)
         if (res.records[0].username !== null) {
           this.tableData = res.records
           this.total = res.total
@@ -125,7 +125,7 @@ export default {
       // this.$axios.get(this.$httpurl+'/byusername',{
       //   params:{username:row.username}
       // }).then(res=>res.data.data).then(res=>{
-      //   //console.log(res[0])
+      //   ////console.log(res[0])
       //   this.$axios.post(this.$httpurl+'/mod',res[0]).then(res=>{
       //
       //
@@ -150,9 +150,9 @@ export default {
         if (this.user1.roleid === 2) {
           res.roleid = this.form.roleid
         }
-        // console.log(res)
+        // //console.log(res)
         this.$axios.post(this.$httpurl + '/api/mod1', res).then(res => {
-          console.log(res.data)
+          //console.log(res.data)
           this.dialogVisible1 = false
           this.$axios.get(this.$httpurl + '/api/listP1', {
             params: {
@@ -182,12 +182,12 @@ export default {
                   username: this.form.username
                 }
         }).then(res => res.data).then(res => res.data).then(res => {
-        console.log(res)
+        //console.log(res)
         if (res[0].username !== null) {
           this.$message.info('账号已被使用')
         } else {
           this.$axios.post(this.$httpurl + '/api/save', this.form).then(res => {
-            console.log(res)
+            //console.log(res)
             if (res.data === true) { this.$message.success('注册成功') }
             this.dialogVisible = false
           })

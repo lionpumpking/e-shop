@@ -53,6 +53,8 @@ methods: {
     this.pageNum=1;
     this.handleSearch()
   },
+
+
     //根据条件查找对应商品
   handleSearch(){
     // this.$message.success("加载中...")
@@ -110,7 +112,7 @@ beforeDestroy() {
     window.addEventListener('scroll', this.handleScroll);
     //初始化商品类型
     this.$axios.post(this.$httpurl + '/producttype/getAllProductTypes').then(res => res.data).then(res => {
-      // console.log(res)
+      // //console.log(res)
       this.type = res.data
     })
     //初始化商品
@@ -120,7 +122,7 @@ beforeDestroy() {
         pageSize: 20
       }
     }).then(res => res.data).then(res => {
-      console.log(res)
+      //console.log(res)
       if(res.data.records <this.pageSize) {
         this.noMore = true;
         this.loading=false

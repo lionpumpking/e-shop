@@ -67,7 +67,47 @@ const routes = [
           title: '错误'
         },
         component: () => import('../views/productTypeManger.vue')
-      }
+      },
+      {
+        path: '/shopType',
+        name: 'shopType',
+        meta: {
+          title: '店铺类型管理'
+        },
+        component: () => import('../views/shopTypeManger.vue')
+      },
+      {
+        path: '/shop',
+        name: 'shop',
+        meta: {
+          title: '店铺管理'
+        },
+        component: () => import('../views/shopManger.vue')
+      },
+      {
+        path: '/shoppingCart',
+        name: 'shoppingCart',
+        meta: {
+          title: '购物车'
+        },
+        component: () => import('../views/shoppingCart.vue')
+      },
+      {
+        path: '/ShopShoppingCart',
+        name: 'ShopShoppingCart',
+        meta: {
+          title: '购物车'
+        },
+        component: () => import('../views/ShopShoppingCart.vue')
+      },
+      {
+        path: '/address',
+        name: 'address',
+        meta: {
+          title: '购物车'
+        },
+        component: () => import('../views/address.vue')
+      },
 
     ]
   },

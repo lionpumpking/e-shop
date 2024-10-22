@@ -146,7 +146,7 @@ export default {
  //   console.log(event.data.split(":")[1])
  //   this.idrole = res
  // }
- //    else console.log(res)
+ //    else //console.log(res)
  //
  //  })
  //

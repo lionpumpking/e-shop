@@ -159,7 +159,7 @@ export default {
       data.append('username',this.user.username)
       data.append("newPassword", this.passwordMod.newPassword)
       this.$axios.post(this.$httpurl+'/user/modPassword',data).then(res=>res.data).then(res=>{
-        console.log(res)
+        //console.log(res)
         if(res.code === 2000){
           this.$message.success('修改成功')
           this.show1=false
@@ -180,7 +180,7 @@ export default {
       data.append('id',this.user.id)
       this.$axios.post(this.$httpurl+'/order/userGetOrder',data).then(res=>res.data).then(res=>{
         this.tableData = res.data
-        console.log(res)
+        //console.log(res)
     })
     },
     //点击表格后的操作按钮
@@ -205,7 +205,7 @@ export default {
       data.append('id',this.user.id)
       this.$axios.post(this.$httpurl+'/order/shopGetOrder',data).then(res=>res.data).then(res=>{
         this.tableData = res.data
-        console.log(res)
+        //console.log(res)
       })
     }
     },

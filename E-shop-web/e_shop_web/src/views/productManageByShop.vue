@@ -88,19 +88,12 @@ export default {
           id: this.user.id
         }
       }).then(res => res.data).then(res => {
-        // console.log(res)
-        if (res.data!==null||res.data.length >= 0) {
+        // //console.log(res)
           this.tableData = res.data
           this.$message({
             type: 'success',
             message: '查询成功'
           })
-        } else {
-          this.$message({
-            type: 'warning',
-            message: res.msg
-          })
-        }
       })
     },
 
@@ -133,7 +126,7 @@ export default {
       data.append('typeid', this.producttype)
       console.log(data)
       this.$axios.post(this.$httpurl + '/product/modProduct', data).then(res => res.data).then(res => {
-        console.log(res)
+        //console.log(res)
         if (res.code === 2000) {
           this.getProduct()
           this.$message({
@@ -160,7 +153,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$axios.post(this.$httpurl + '/product/removeProduct', data).then(res => res.data).then(res => {
-          // console.log(res)
+          // //console.log(res)
           if (res.code === 2000) {
             this.getProduct()
             this.$message({
@@ -201,18 +194,11 @@ export default {
           id: this.user.id
         }
       }).then(res => res.data).then(res => {
-        if (res.data.length > 0) {
           this.tableData = res.data
           this.$message({
             type: 'success',
             message: '查询成功!'
           })
-        } else {
-          this.$message({
-            type: 'warning',
-            message: '查询无数据!'
-          })
-        }
       })
     },
 
@@ -241,7 +227,7 @@ export default {
       data.append('specification', this.addProduc.specification)
       data.append('img', this.addProduc.img)
       this.$axios.post(this.$httpurl+'/product/addProduct',data).then(res=>res.data).then(res=>{
-        console.log(res)
+        //console.log(res)
         if(res.code === 2000){
           this.$message.success("新增成功")
         }else{
