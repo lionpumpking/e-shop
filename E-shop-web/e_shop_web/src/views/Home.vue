@@ -8,6 +8,7 @@ export default {
   components: {Hander, Aside, Main},
   data() {
     return {
+      deliver:false,
       user: JSON.parse(localStorage.getItem("LoginUser")),
       icon: 'el-icon-back',
       //右侧卡片显示
@@ -22,6 +23,9 @@ export default {
       modInfo: '修改资料',
       //修改密码
       modPassword: '修改密码',
+      express:[],
+      toexpress:'',
+      expressid:'',
       passwordMod: {
         password: '',
         newPassword: '',
@@ -84,6 +88,15 @@ export default {
         directory:"user",
         name:'',
       },
+    }
+  },
+
+  watch: {
+    activeIndex(newV){
+      console.log("发生了变化",newV)
+    },
+    toexpress(newV){
+      console.log(newV)
     }
   },
 
@@ -184,22 +197,37 @@ export default {
     })
     },
     //点击表格后的操作按钮
-    operation(){
-      this.$message({
-        message: "Too lazy to do this feature",
-        type: 'error',
-      })
-      //用户操作
-        if(this.user.roleid === 1){
 
-        }
-      //商家操作
-      if(this.user.roleid === 2){
+    getExpress(){
+    this.$axios.get(this.$httpurl+'/express/geyAll').then(res=>res.data).then(res=>{
+      this.express = res.data
+      //console.log(res)
+    })
+    },
 
+    operation(row){
+      if(this.activeIndex==='0') {
+        this.deliver = true
+        this.expressid=row.id
       }
+
+    },
+
+    expressByShop(){
+      let data = new FormData
+      data.append('id',this.expressid)
+      data.append('express',this.toexpress)
+      this.$axios.post(this.$httpurl+'/order/acceptOrder',data).then(res=>res.data).then(res=>{
+        if(res.code===2000){
+          this.$message.success('接单成功')
+          this.getOrder(0)
+          this.deliver = false
+        }else this.$message.warning(res.msg)
+      })
     },
     //商家获取订单
     ShopGetOrder(value){
+      this.activeIndex=value
       let data = new FormData
       data.append('state', value)
       data.append('id',this.user.id)
@@ -214,6 +242,7 @@ export default {
     //根据当前用户身份决定初始化表格的数据
     this.uploadData.name = this.user.id
     this.img=this.user.uid
+    this.getExpress()
     if(this.user.roleid===2)
     this.ShopGetOrder(-2)
     if(this.user.roleid===1)
@@ -310,6 +339,7 @@ export default {
                       <el-menu-item index="-2">全部订单</el-menu-item>
                       <el-menu-item index="2">退款申请</el-menu-item>
                       <el-menu-item index="1">已完成</el-menu-item>
+                      <el-menu-item index="0">已支付</el-menu-item>
                       <el-menu-item index="-1">退款</el-menu-item>
                       <el-menu-item index="3">退款驳回</el-menu-item>
                       <el-menu-item index="5">待支付</el-menu-item>
@@ -339,7 +369,9 @@ export default {
                       label="商品数量">
                     </el-table-column>
                     <el-table-column label="操作">
-                      <el-button @click="operation">操作</el-button>
+                      <template #default="{row}">
+                      <el-button @click="operation(row)">操作</el-button>
+                      </template>
                     </el-table-column>
                   </el-table>
                 </div>
@@ -427,7 +459,34 @@ export default {
           </el-row>
         </div>
       </el-main>
+
+    <div>
+      <el-drawer
+        title="确认订单"
+        :visible.sync="deliver"
+        direction="rtl">
+
+        <el-form ref="form" label-width="80px">
+          <el-form-item label="快递方式">
+            <el-select v-model="toexpress"  placeholder="请选择">
+              <el-option
+                v-for="item in express"
+                :key="item.id"
+                :label="item.name"
+                :value="item.name">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item >
+            <el-button type="primary" @click="expressByShop">确 定</el-button>
+          </el-form-item>
+
+        </el-form>
+
+      </el-drawer>
+    </div>
     </el-container>
+
 
 </template>
 
