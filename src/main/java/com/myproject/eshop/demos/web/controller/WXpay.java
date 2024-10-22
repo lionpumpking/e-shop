@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
    public res pay(int id ,int price){
       Order order = orderService.getById(id);
       order.setState(0);
-      if(orderService.save(order))
+      if(orderService.updateById(order))
          return res.success("支付成功",order);
       return res.fail("支付失败");
    }

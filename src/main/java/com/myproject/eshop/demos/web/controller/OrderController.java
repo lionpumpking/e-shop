@@ -1,5 +1,6 @@
 package com.myproject.eshop.demos.web.controller;
 
+import com.myproject.eshop.demos.web.Result.Pay;
 import com.myproject.eshop.demos.web.Result.res;
 import com.myproject.eshop.demos.web.model.*;
 import com.myproject.eshop.demos.web.service.*;
@@ -47,30 +48,26 @@ public class OrderController {
 
     //下单
     @PostMapping("/GetOrder")
-    public res GetOrder(Order order) {
+    public res GetOrder(int productid,String destination,int userid,int num) {
+//        System.out.println(productid+destination+userid+num);
         double price=0;
-        Product product = productService.getById(order.getProductid());
+        Product product = productService.getById(productid);
         if (product == null) {
             return res.fail("该商品已下架");
         }
-        if(product.getQuantity() <= order.getNumber()){
+        if(product.getQuantity() <= num){
             return res.fail("库存不足");
         }
-        price = product.getPrice() * order.getNumber()+product.getFreight();
-        order.setState(5);
+        Order order = new Order();
+        order.setProductid(productid);
+        order.setDestination(destination);
+        price = product.getPrice() * num+product.getFreight();
+        order.setNumber(num);
+        order.setOwnerid(userid);
+        order.setShopid(product.getOwnershopid());
+        order.setState(0);
+        orderService.save(order);
         return res.success("总价",price);
-
-        //推送订单到快递公司，获取快递单号
-
-        //判断微信支付是否成功
-        //成功
-//        product.setQuantity(product.getQuantity() - order.getNumber());
-//        productService.updateById(product);
-//        if(orderService.save(order)){
-//            order.setState(0);
-//            return res.success("下单成功",price);
-//            }
-//        return res.fail("下单失败");
     }
 
     //退款
@@ -94,6 +91,7 @@ public class OrderController {
      //商家确认订单
      @PostMapping("/acceptOrder")
      public res acceptOrder(int id,String express){
+        System.out.println(express);
         Order order = orderService.getById(id);
         if(order == null){
             return res.fail("该订单不存在");

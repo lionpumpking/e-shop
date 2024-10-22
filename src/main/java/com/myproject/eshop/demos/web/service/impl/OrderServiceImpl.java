@@ -39,4 +39,18 @@ public class OrderServiceImpl extends ServiceImpl<OrderMapper,Order> implements 
         return orders;
     }
 
+    @Override
+    public int insert(Order order) {
+        return orderMapper.insert(order);
+    }
+
+    @Override
+    public int getByAll(int productid, String destination, int userid, int num) {
+        List<Order> order= orderMapper.getByAll(productid, destination, userid,num);
+        for(Order orderi : order){
+            return orderi.getId();
+        }
+        return 0;
+    }
+
 }

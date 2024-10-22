@@ -20,9 +20,12 @@ import java.util.List;
 @Mapper
 public interface OrderMapper extends BaseMapper<Order> {
 
-    @Select("select * from `order` where ownerid = #{ownerid}")
+    @Select("select * from order1 where ownerid = #{ownerid}")
     List<Order> UserGetOrder(@Param("ownerid")int oenerid);
 
-    @Select("select * from `order` where shopid = #{shopid}")
+    @Select("select * from order1 where shopid = #{shopid}")
     List<Order> ShopGetOrder(@Param("shopid")int shopid);
+
+    @Select("SELECT * FROM order1 WHERE productid = #{productid} AND destination = #{destination} AND ownerid = #{userid} AND number = #{num}")
+    List<Order> getByAll(int productid, String destination, int userid, int num);
 }

@@ -40,11 +40,12 @@ public class ShoppingcartController {
 
     //用户加入商品到购物车
     @PostMapping("/addShoppingcart")
-    public res addShoppingcart(int userid,int productid,int shopid){
+    public res addShoppingcart(int userid,int productid){
         Shoppingcart shopping = new Shoppingcart();
         shopping.setUserid(userid);
         shopping.setProductid(productid);
-        shopping.setShopid(shopid);
+        Product product = productsService.getById(productid);
+        shopping.setShopid(product.getOwnershopid());
         if(shoppingcartService.save(shopping))
             return res.success("加入购物车成功",shopping);
         else return res.fail("加入购物车失败");

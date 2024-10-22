@@ -20,10 +20,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @Data
-@TableName("order")
+@TableName("order1")
 public class Order implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+
 
     @TableId("id")
     private int id;

@@ -15,10 +15,14 @@ import java.util.List;
  * @author hxt
  * @since 2024-10-17
  */
-@Service
+
 public interface OrderService extends IService<Order> {
 
     List<Order> getByOwner(int id);
 
     List<Order> ShopGetOrder(int shopid);
+
+    int insert(Order order);
+
+    int getByAll(int productid, String destination, int userid, int num);
 }
