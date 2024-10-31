@@ -157,6 +157,7 @@ export default {
             this.$message.info('没有更多了')
           }
           this.toMessage = false
+          this.refresh = false
         }
         if (this.refresh === true) {
           this.products = res.data.records
@@ -268,9 +269,9 @@ export default {
             <el-row :gutter="20">
               <el-col :span="8" v-for="(product, index) in products" :key="index">
                 <el-card @click.native="detail(product)" :body-style="{ padding: '0px' }">
-                  <img v-if="product.img!== ''" :src="product.img" style="object-fit: none; height: 300px" class="image"
+                  <img v-if="product.img!== ''" :src="product.img" style="object-fit: fill; height: 300px" class="image"
                        width="300px" height="300px" alt="商品图片">
-                  <img v-else src="https://via.placeholder.com/300" class="image" width="300px" height="300px"
+                  <img v-else src="https://via.placeholder.com/300" class="image"  width="300px" height="300px"
                        alt="商品图片">
                   <!--            https://via.placeholder.com/300-->
                   <div style="padding: 14px;">

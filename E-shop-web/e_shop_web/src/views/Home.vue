@@ -235,6 +235,11 @@ export default {
         this.tableData = res.data
         //console.log(res)
       })
+    },
+    //申请店铺
+    shop(){
+      console.log("点击了申请店铺")
+      this.$router.push('applyForShop')
     }
     },
 
@@ -263,6 +268,7 @@ export default {
                 <el-card class="box-card">
                   <div slot="header" class="clearfix">
                     <span>个人中心</span>
+                    <el-button @click="shop" size="mini" type="primary" style="margin-left: 30px">申请店铺</el-button>
                   </div>
                   <div style="margin-right: 1px">
 <!--                    <img :src="require('../assets/logo.png')" alt="加载中"  style="width:100%;height: 100%">-->

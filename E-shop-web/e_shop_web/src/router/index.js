@@ -108,6 +108,14 @@ const routes = [
         },
         component: () => import('../views/address.vue')
       },
+      {
+        path: '/applyForShop',
+        name: 'applyForShop',
+        meta: {
+          title: '购物车'
+        },
+        component: () => import('../views/applyForShop.vue')
+      },
 
     ]
   },

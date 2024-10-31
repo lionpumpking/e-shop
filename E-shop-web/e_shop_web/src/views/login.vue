@@ -242,7 +242,7 @@ export default {
           <sapn>如果上传多张，只会留下最后一张</sapn>
         </el-form-item>
 
-        <el-form-item label="账 号:"prop="username" :label-width="formLabelWidth">
+        <el-form-item label="账 号:" prop="username" :label-width="formLabelWidth">
           <el-input style="width:300px" v-model="resign.username" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="用户名:" prop="name" :label-width="formLabelWidth">
