@@ -86,6 +86,7 @@ public class ShoppingcartController {
         }
         List<shoppingCartVo> result =  new ArrayList<>();
         for(Shoppingcart s : shoppings){
+            System.out.println(s);
             Product product = productsService.getById(s.getProductid());
             shoppingCartVo vo = new shoppingCartVo(s.getId(),s.getUserid(),product.getName(),product.getPrice(),product.getImg(),product.getDescription());
             result.add(vo);

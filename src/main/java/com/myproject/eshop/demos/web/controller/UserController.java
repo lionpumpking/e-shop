@@ -63,12 +63,19 @@ import java.util.Objects;
 
    //注册用户
    @PostMapping("/signin")
-   public res SignIN( User user){
-      if(userMapper.getByUsername(user.getUsername()) != null){
-         return res.fail("该账号已存在");
-      }
-      userService.save(user);
-      return res.success("注册成功", new UserVo(user));
+   public res SignIN(String uid,String name,String password,String username,int sex,int age,int roleid,String phone){
+      if(userService.getByUsername(username) != null) return res.fail("该用户名已存在");
+      User user = new User();
+      user.setUid(uid);
+      user.setUsername(username);
+      user.setName(name);
+      user.setPassword(password);
+      user.setSex(sex);
+      user.setAge(age);
+      user.setRoleid(roleid);
+      user.setPhone(phone);
+      if(userService.save(user)) return res.success("注册成功",user);
+      return res.fail("注册失败");
    }
 
    //修改除密码外的信息

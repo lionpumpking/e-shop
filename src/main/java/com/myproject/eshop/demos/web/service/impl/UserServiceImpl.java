@@ -27,4 +27,10 @@ import org.springframework.stereotype.Service;
       }
       return new User();
    }
+
+   @Override
+   public User getByUsername(String username) {
+      User user = userMapper.getByUsername(username);
+      return user;
+   }
 }
