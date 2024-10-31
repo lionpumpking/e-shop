@@ -11,6 +11,21 @@ export default {
       backgroundImg:require('../../public/980.png'),
       captchaUrl: require('@/assets/logo.png'),
       result: '',
+      dialogImageUrl:'',
+      uploadData: {
+        directory:"user",
+        name:'',
+      },
+      resign:{
+        uid: '',
+        name: '',
+        password: '',
+        sex: 2,
+        age: 0,
+        roleid: 1,
+        phone: '',
+        username: '',
+      },
       form: {
         username: '',
         password: '',
@@ -46,7 +61,23 @@ export default {
     }
   },
 
+  watch:{
+    resign(newV,oldV){
+      console.log(newV,oldV)
+    },
+  },
+
   methods: {
+    // 删除图片
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    //传递图片的地址
+    handlePictureCardPreview(file) {
+      console.log(file)
+      this.dialogImageUrl = file
+      this.resign.uid = file;
+    },
 
     //登录接口
     onSubmit() {
@@ -76,25 +107,29 @@ export default {
     },
     //点击注册按钮后显示注册页面
     enroll() {
+
       this.dialogVisible1 = true
     },
 
     //注册接口
     upuser() {
-      let formData = new FormData();
-      formData.append('username', this.form1.username);
-      formData.append('password', this.form1.password);
-      formData.append('name', this.form1.name);
-      formData.append('sex', this.form1.sex);
-      formData.append('age', this.form1.age);
-      formData.append('roleid', 1);
-      this.$axios.post(this.$httpurl + '/user/signin', formData).then(res => res.data).then(res => {
+      console.log(this.resign)
+      let data = new FormData();
+      data.append('username', this.resign.username);
+      data.append('password', this.resign.password);
+      data.append('name', this.resign.name);
+      data.append('sex', this.resign.sex);
+      data.append('age', this.resign.age);
+      data.append('roleid', this.resign.roleid);
+      data.append('phone', this.resign.phone);
+      data.append('uid',this.resign.uid)
+      this.$axios.post(this.$httpurl + '/user/signin', data).then(res => res.data).then(res => {
           console.log("这里是注册的返回结果",res)
         if(res.code === 2000){
           this.$message.success(res.msg);
           this.dialogVisible1 = false;
             //推进路由，进入首页
-          this.$router.push('/index');
+          this.$message.success(res.msg)
           }
         else if(res.code === 4000){
           this.$message.error(res.msg);
@@ -190,25 +225,50 @@ export default {
 
 <!--    注册页面-->
     <el-dialog title="注 册" :visible.sync="dialogVisible1"   width="30%" append-to-body>
-      <el-form :model="form1" :rules="rules">
+      <el-form :model="resign" :rules="rules">
+        <el-form-item label="头像" prop="resign.uid" :label-width="formLabelWidth">
+          <el-upload
+            action="http://172.20.36.194:8082/file/upload"
+            :data="uploadData"
+            list-type="picture-card"
+            :on-success="handlePictureCardPreview"
+            :on-remove="handleRemove">
+            <i class="el-icon-plus"></i>
+          </el-upload>
+          <!--          <el-image v-else  :src="dialogImageUrl" style="width:300px"/>-->
+          <el-dialog :visible.sync="dialogVisible">
+            <img width="100%" :src="dialogImageUrl" alt="">
+          </el-dialog>
+          <sapn>如果上传多张，只会留下最后一张</sapn>
+        </el-form-item>
+
         <el-form-item label="账 号:"prop="username" :label-width="formLabelWidth">
-          <el-input style="width:300px" v-model="form1.username" autocomplete="off"></el-input>
+          <el-input style="width:300px" v-model="resign.username" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="用户名:" prop="name" :label-width="formLabelWidth">
-          <el-input style="width:300px" v-model="form1.name" autocomplete="off"></el-input>
+          <el-input style="width:300px" v-model="resign.name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item  label="密 码:" prop="password" :label-width="formLabelWidth">
-          <el-input type="password" style="width:300px" v-model="form1.password" autocomplete="off"></el-input>
+          <el-input type="password" style="width:300px" v-model="resign.password" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="性 别:" :label-width="formLabelWidth">
-          <el-radio-group v-model="form1.sex">
+          <el-radio-group v-model="resign.sex">
             <el-radio :label="1">男</el-radio>
             <el-radio :label="0">女</el-radio>
-            <el-radio :label="2">未知</el-radio>
+            <el-radio :label="2">保密</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <el-form-item label="账户类型:" :label-width="formLabelWidth">
+          <el-radio-group v-model="resign.roleid">
+            <el-radio :label="1">用户</el-radio>
+            <el-radio :label="0">商家</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="年 龄:" :label-width="formLabelWidth">
-          <el-input style="width:300px" v-model="form1.age" autocomplete="off"></el-input>
+          <el-input style="width:300px" v-model="resign.age" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="手 机:" :label-width="formLabelWidth">
+          <el-input style="width:300px" v-model="resign.phone" autocomplete="off"></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

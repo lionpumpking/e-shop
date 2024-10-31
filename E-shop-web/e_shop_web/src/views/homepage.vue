@@ -91,7 +91,7 @@ export default {
           this.$message.success('下单成功')
           this.price=res.data
           this.buy = false
-          this.pay=true
+          this.pay=false
         } else {
           this.$message.warning(res.msg)
         }

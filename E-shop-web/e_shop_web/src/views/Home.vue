@@ -410,7 +410,7 @@ export default {
                   </div>
                   <div>
                     <el-form label-width="80px" :model="newUser" size="small" :rules="rules" label-position="right">
-                      <el-form-item label="姓名" prop="name">
+                      <el-form-item label="头像" prop="name">
                         <el-upload
                           action="http://172.20.36.194:8082/file/upload"
                           :data="uploadData"

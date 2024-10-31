@@ -118,7 +118,7 @@ export default {
 <template>
   <div>
     <div>
-      <el-button v-show="show===0" type="primary" @click="showAdd"> 添加地址</el-button>
+      <el-button type="primary" @click="showAdd"> 添加地址</el-button>
     </div>
     <div>
       <el-table

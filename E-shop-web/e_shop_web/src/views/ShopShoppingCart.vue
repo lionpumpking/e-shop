@@ -13,7 +13,7 @@ export default {
       let data = new FormData
       data.append('userid', this.user.id)
       this.$axios.post(this.$httpurl + '/shoppingcart/merchantGet',data).then(res=>res.data).then(res=>{
-        // //console.log(res)
+        console.log(res)
         this.tableData = res.data
       })
     },
