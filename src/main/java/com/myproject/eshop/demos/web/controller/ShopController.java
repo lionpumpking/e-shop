@@ -4,7 +4,11 @@ import com.myproject.eshop.demos.web.Result.res;
 import com.myproject.eshop.demos.web.mapper.ShopMapper;
 import com.myproject.eshop.demos.web.mapper.ShoptypeMapper;
 import com.myproject.eshop.demos.web.model.Shop;
+import com.myproject.eshop.demos.web.model.Shoptype;
+import com.myproject.eshop.demos.web.model.User;
 import com.myproject.eshop.demos.web.service.ShopService;
+import com.myproject.eshop.demos.web.service.ShoptypeService;
+import com.myproject.eshop.demos.web.service.UserService;
 import com.myproject.eshop.demos.web.utils.BusinessExp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +35,12 @@ public class ShopController {
     @Autowired
     private ShopMapper shopMapper;
 
+    @Autowired
+    private ShoptypeService shoptypeService;
+
+    @Autowired
+    private UserService userService;
+
     //获取所有店铺
     @PostMapping("/shopList")
     public res shopList() {
@@ -53,14 +63,24 @@ public class ShopController {
 
     //申请新的店铺
     @PostMapping("/addShop")
-    public res addShop(Shop shop){
-        try {
-            shop.setIsvalid(0);
-            shopService.save(shop);
+    public res addShop(int ownerid,int shoptypeid,String description ,String name,double lat,double lon,String shopping){
+        Shop shop = shopService.getByOwnerUsername(String.valueOf(ownerid));
+        if(shop!=null) return res.fail("您已申请过店铺");
+        shop = new Shop();
+        shop.setOwnerusername(String.valueOf(ownerid));
+        shop.setLon(lon);
+        shop.setLat(lat);
+        shop.setShoptypeid(shoptypeid);
+        shop.setShopimg(shopping);
+        shop.setShopdescription(description);
+        shop.setShopname(name);
+        Shoptype type = shoptypeService.getById(shoptypeid);
+        shop.setShoptype(type.getShoptype());
+        shop.setIsvalid(0);
+        if(shopService.save(shop)){
             return res.success("申请成功，请等待审核",shop);
-        } catch (Exception e) {
-            throw new BusinessExp("申请失败");
         }
+        else return res.fail("申请失败");
     }
 
     //删除店铺
@@ -81,6 +101,9 @@ public class ShopController {
         if(shop==null) return res.fail("该店铺不存在");
         shop.setIsvalid(isvalid);
         if(shopService.updateById(shop)){
+            User user = userService.getById(Integer.valueOf(shop.getOwnerusername()));
+            user.setRoleid(0);
+            userService.updateById(user);
             return res.success("修改成功",shop);
         }
         return res.fail("修改失败");

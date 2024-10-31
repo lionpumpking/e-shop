@@ -4,6 +4,7 @@ import com.myproject.eshop.demos.web.Auth.JWT;
 import com.myproject.eshop.demos.web.Result.UserVo;
 import com.myproject.eshop.demos.web.Result.res;
 import com.myproject.eshop.demos.web.mapper.UserMapper;
+import com.myproject.eshop.demos.web.model.Shop;
 import com.myproject.eshop.demos.web.model.User;
 import com.myproject.eshop.demos.web.service.UserService;
 import com.myproject.eshop.demos.web.utils.BusinessExp;
@@ -41,6 +42,8 @@ import java.util.Objects;
    private VerCodeController verCodeController;
    @Autowired
    private OrderController orderController;
+   @Autowired
+   private ShopController shopController;
 
 //   test
 //   @GetMapping("/get")
@@ -74,6 +77,15 @@ import java.util.Objects;
       user.setAge(age);
       user.setRoleid(roleid);
       user.setPhone(phone);
+//      if(roleid  == 0){
+//         Shop shop = new Shop();
+//         shop.setOwnerusername(user.getUsername());
+//         shop.setShopname(username);
+//         shop.setLat(0.00);
+//         shop.setLon(0.00);
+//
+//         shopController.addShop(shop);
+//      }
       if(userService.save(user)) return res.success("注册成功",user);
       return res.fail("注册失败");
    }

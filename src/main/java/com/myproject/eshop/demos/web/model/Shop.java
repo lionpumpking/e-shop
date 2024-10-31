@@ -45,7 +45,7 @@ public class Shop implements Serializable {
      * 店铺类型id
      */
     @TableField("shoptypeid")
-    private String shoptypeid;
+    private int shoptypeid;
 
     /**
      * 拥有者
