@@ -144,7 +144,7 @@ public class OrderController {
      //商家获取店铺订单
      @PostMapping("/shopGetOrder")
      public res shopGetOrder(int id,int state){
-         Shop shop = shopService.getByOwnerUsername(userService.getById(id).getUsername());
+         Shop shop = shopService.getByOwnerUsername(String.valueOf(userService.getById(id).getId()));
         List<Order> orders = orderService.ShopGetOrder(shop.getId());
         if(orders.isEmpty()){
             return res.fail("该商家没有订单");
