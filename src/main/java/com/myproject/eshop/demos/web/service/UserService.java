@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
     * Author:
     * Data:
     */
-@Service
    public interface UserService extends IService<User> {
       User LoginCheck(String username, String password);
       User getByUsername(String username);
