@@ -26,10 +26,12 @@ export default {
       product: [],
       showdetail: false,
       buy: false,
-      num:0,
-      adress:'',
-      Toadress:'',
-      pay:false,
+      num: 0,
+      adress: '',
+      Toadress: '',
+      pay: false,
+      message: '',
+      msg: false
     }
   },
 
@@ -59,39 +61,39 @@ export default {
       this.pageNum = 1
       this.handleSearch()
     },
-    handleChange(num){
-      console.log("这里选择了数量",num)
+    handleChange (num) {
+      console.log('这里选择了数量', num)
     },
 
-    showPay(atate){
-        if(atate===0)
-          this.buy=false
-        else{
-          this.buy=false
-          this.pay=true
-        }
+    showPay (atate) {
+      if (atate === 0) {
+        this.buy = false
+      } else {
+        this.buy = false
+        this.pay = true
+      }
     },
 
     buyNow () {
       this.showdetail = false
       this.buy = true
     },
-    addOrder(){
-      if(this.Toadress===''){
+    addOrder () {
+      if (this.Toadress === '') {
         this.$message.warning('请填写收货地址')
         return
       }
-        let data = new FormData
-      data.append("productid", this.product.productid)
+      let data = new FormData
+      data.append('productid', this.product.productid)
       data.append('userid', this.user.id)
       data.append('num', this.num)
       data.append('destination', this.Toadress)
       this.$axios.post(this.$httpurl + '/order/GetOrder', data).then(res => res.data).then(res => {
         if (res.code === 2000) {
           this.$message.success('下单成功')
-          this.price=res.data
+          this.price = res.data
           this.buy = false
-          this.pay=false
+          this.pay = false
         } else {
           this.$message.warning(res.msg)
         }
@@ -112,15 +114,17 @@ export default {
         }
       })
     },
+    handleClose () {
+      this.showdetail = false
+    },
 
+    getAdress () {
 
-    getAdress(){
-
-      this.$axios.get(this.$httpurl+'/adress/Getadress',{
+      this.$axios.get(this.$httpurl + '/adress/Getadress', {
         params: {
           userid: this.user.id,
         }
-      }).then(res=>res.data).then(res=>{
+      }).then(res => res.data).then(res => {
         console.log(res)
         this.adress = res.data
       })
@@ -182,7 +186,33 @@ export default {
         this.pageNum += 1
         this.handleSearch()
       }
-    }
+    },
+
+    showMsg () {
+      console.log('联系')
+      this.showdetail = false
+      this.msg = true
+      console.log(this.msg)
+    },
+    connectShop () {
+      console.log('点击了发送消息')
+      let data = new FormData
+      data.append('fromid', this.user.id)
+      data.append('shopid', parseInt(this.product.ownershopid))
+      data.append('msg', this.message)
+      data.append('type', 1)
+      this.$axios.post(this.$httpurl + '/msg/connect', data).then(res => res.data).then(res => {
+        console.log(res)
+        if(res.code===2000){
+          this.$message.success('消息发送成功')
+          this.msg = false
+        }else{
+          this.$message.warning(res.msg)
+          this.msg = false
+        }
+      })
+
+    },
   },
 
   beforeDestroy () {
@@ -271,7 +301,7 @@ export default {
                 <el-card @click.native="detail(product)" :body-style="{ padding: '0px' }">
                   <img v-if="product.img!== ''" :src="product.img" style="object-fit: fill; height: 300px" class="image"
                        width="300px" height="300px" alt="商品图片">
-                  <img v-else src="https://via.placeholder.com/300" class="image"  width="300px" height="300px"
+                  <img v-else src="https://via.placeholder.com/300" class="image" width="300px" height="300px"
                        alt="商品图片">
                   <!--            https://via.placeholder.com/300-->
                   <div style="padding: 14px;">
@@ -321,11 +351,26 @@ export default {
                 <el-input v-model="product.producttype" disabled></el-input>
               </el-form-item>
               <el-form-item>
+                <el-button type="primary" @click="showMsg">联系商家</el-button>
                 <el-button type="primary" @click="addCart">加入购物车</el-button>
                 <el-button type="primary" @click="buyNow">立即购买</el-button>
               </el-form-item>
             </el-form>
           </el-drawer>
+
+
+          <el-dialog
+            title="联系商家"
+            :visible.sync="msg"
+            width="30%"
+            :before-close="handleClose">
+            <el-input v-model="message" placeholder="请输入消息"> </el-input>
+            <span slot="footer" class="dialog-footer">
+    <el-button @click="msg = false">取 消</el-button>
+    <el-button type="primary" @click="connectShop">确 定</el-button>
+  </span>
+          </el-dialog>
+
 
           <el-drawer
             title="商品详情"
@@ -341,7 +386,8 @@ export default {
               </el-form-item>
               <el-form-item>
                 <template>
-                  <el-input-number v-model="num" @change="handleChange" :min="1" :max="product.quantity" label="描述文字"></el-input-number>
+                  <el-input-number v-model="num" @change="handleChange" :min="1" :max="product.quantity"
+                                   label="描述文字"></el-input-number>
                 </template>
               </el-form-item>
               <el-form-item>
@@ -350,7 +396,7 @@ export default {
                     v-for="item in adress"
                     :key="item.id"
                     :label="item.adress"
-                    :value="item.adress">{{item.adress}}
+                    :value="item.adress">{{ item.adress }}
                   </el-option>
                 </el-select>
               </el-form-item>

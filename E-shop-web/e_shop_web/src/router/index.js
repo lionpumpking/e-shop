@@ -116,6 +116,14 @@ const routes = [
         },
         component: () => import('../views/applyForShop.vue')
       },
+      {
+        path: '/msg',
+        name: 'msg',
+        meta: {
+          title: '消息中心'
+        },
+        component: () => import('../views/msg.vue')
+      },
 
     ]
   },
