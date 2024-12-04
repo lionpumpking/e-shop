@@ -12,7 +12,8 @@ Vue.use(VueRouter)
 axios.defaults.withCredentials = true
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
-Vue.prototype.$httpurl = 'http://172.20.36.194:8082'
+// Vue.prototype.$httpurl = 'http://172.20.36.194:8082'
+Vue.prototype.$httpurl = 'http://10.45.185.166:8082'
 
 new Vue({
   router,

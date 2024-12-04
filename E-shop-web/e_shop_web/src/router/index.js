@@ -159,6 +159,7 @@ router.beforeEach(async (to, from, next) => {
   } else {
     const admin = JSON.parse(localStorage.getItem('LoginUser'))
     axios.get('http://172.20.36.194:8082/user/checkLogin', {
+    //   axios.get('http://localhost:8082/user/checkLogin', {
       headers: {
         token: admin.token
       }
